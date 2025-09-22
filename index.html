@@ -21,12 +21,16 @@
   <canvas id="canvas-main"></canvas>
   <canvas id="canvas-particles"></canvas>
   <div class="hint">
-    <p>Click to fire from click position. Space to fire from bottom center. Esc to clear. </p>
-    <label for='sliderax' id="lax">X acceleration (dx^2/dt^2)</label><input type='range' min="-5" max="5" value='0' id="sliderax"> <br>
-    <label for='slideray' id="lay">y acceleration (dy^2/dt^2)</label><input type='range' min="-5" max="5" value='0' id="slideray"> <br>
+    <p>Click to fire from click position. Space to fire from bottom center. K to randomize position and acceleration. Esc to clear. </p>
+    <label for='sliderax' id="lax">X acceleration (dx^2/dt^2)</label>
+    <input type='range' min="-5" max="5" value='0' step='0.2' id="sliderax"> <br>
+    <label for='slideray' id="lay">y acceleration (dy^2/dt^2)</label>
+    <input type='range' min="-5" max="5" value='0' step='0.2' id="slideray"> <br>
 
-    <label for='sliderdx' id="ldx">X velocity (dx/dt)</label><input type='range' min="-8" max="8" value='0' id="sliderdx"> <br>
-    <label for='sliderdy' id="ldy">y acceleration (dy/dt)</label><input type='range' min="0" max="10" value='0' id="sliderdy">
+    <label for='sliderdx' id="ldx">X velocity (dx/dt)</label>
+    <input type='range' min="-8" max="8" value='0' step='0.2' id="sliderdx"> <br>
+    <label for='sliderdy' id="ldy">y velocity (dy/dt)</label>
+    <input type='range' min="0" max="10" value='0' step='0.2' id="sliderdy">
 
 
   </div>

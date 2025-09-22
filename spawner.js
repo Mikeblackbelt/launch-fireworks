@@ -74,11 +74,24 @@ canvas.addEventListener('click', e=>{
 });
 
 window.addEventListener('keydown', e=>{
+  console.log(e.code)
   if (e.code==='Space'){
     spawnAt(window.innerWidth/2, window.innerHeight-20);
     e.preventDefault();
   } else if(e.code==='Escape'){
-    fireworks.length=0;
+    let fireworkLen = fireworks.length
+    for (let i = 0; i < fireworkLen - 1; i++) {
+      const f = fireworks[i];
+      fireworks.splice(i,1);
+    }
+  } else if (e.code==='KeyK') {
+    velocityX = 10*(Math.random()-0.5)
+    velocityY = 4*(Math.random()) + 2
+
+    accelerationX = 10*(Math.random()-0.5)
+    accelerationY = 10*(Math.random()-0.5)
+ 
+    spawnAt(window.innerWidth/2, window.innerHeight-20)
   }
 });
 
