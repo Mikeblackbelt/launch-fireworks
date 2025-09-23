@@ -50,28 +50,127 @@ export class Particle {
   }
 }
 
+export function initParticles(x, y, count, color = null, effect = "circle") {
+  let newParticles = [];
 
-export function initParticles(x, y, count) {
-  let considerMulti = false;  
-  if (Math.random() < 0.5) {considerMulti = true}
-  for (let i=0;i<count;i++){
-    const size = Math.random()*8+4;
-    const angle = Math.random()*Math.PI*2;
-    const speed = Math.random()*5+2;
-    const dx = Math.cos(angle)*speed;
-    const dy = Math.sin(angle)*speed;
-    const color = `hsl(${Math.random()*360},100%,50%)`;
-    if (Math.random() < 0.05 & considerMulti) {
-        initParticles(x + 5*dx, y + 5*dy, Math.floor(count/2));
+  const getColor = () =>
+    color ?? `hsl(${Math.random() * 360}, 100%, 50%)`;
+
+  switch (effect) {
+    case "circle": {
+      for (let i = 0; i < count; i++) {
+        const angle = Math.random() * Math.PI * 2;
+        const speed = Math.random() * 5 + 2;
+        const dx = Math.cos(angle) * speed; 
+        const dy = Math.sin(angle) * speed;
+        newParticles.push(
+          new Particle(x, y, dx* (0.8 + 0.2*Math.random()), dy* (0.8 + 0.2*Math.random()), Math.random() * 8 + 4, getColor())
+        );
+      }
+      break;
     }
 
-    particles.push(new Particle(x, y, dx, dy, size, color));
-   
+    case "spiral": {
+      for (let i = 0; i < count*3; i++) {
+        const angle = i * 0.3; // spacing
+        const speed = 3 + i * 0.02;
+        const dx = Math.cos(angle) * speed;
+        const dy = Math.sin(angle) * speed;
+        newParticles.push(
+          new Particle(x, y, dx, dy, Math.random() * 6 + 3, getColor())
+        );
+      }
+      break;
+    }
+
+    case "star": {
+      const points = 5;
+      for (let i = 0; i < points; i++) {
+        const angle = (i / points) * Math.PI * 2;
+        for (let j = 0; j < count / points; j++) {
+          const speed = 2 + Math.random() * 5;
+          const dx = Math.cos(angle) * speed;
+          const dy = Math.sin(angle) * speed;
+          if (Math.random() < 0.1) {
+            initParticles(x,y, count/10, null, effect='fountain');
+          }
+          newParticles.push(
+            new Particle(x, y, dx, dy, Math.random() * 6 + 2, getColor())
+          );
+        }
+      }
+      break;
+    }
+
+    case "fountain": {
+      for (let i = 0; i < count; i++) {
+        const angle = (Math.random() - 0.5) * (Math.PI / 2); 
+        const speed = Math.random() * 6 + 3;
+        const dx = Math.cos(angle) * speed * 0.5;
+        const dy = -Math.abs(Math.sin(angle) * speed); 
+        newParticles.push(
+          new Particle(x, y, dx, dy, Math.random() * 5 + 2, getColor())
+        );
+      }
+      break;
+    }
+
+    case 'double': {
+      for (let i = 0; i < count; i++) {
+        const angle = Math.random() * Math.PI * 2;
+        const speed = Math.random() * 5 + 2;
+        const dx = Math.cos(angle) * speed; 
+        const dy = Math.sin(angle) * speed;
+        if (Math.random() < 0.05) {
+            initParticles(x + (4+4*Math.random())*dx,y + 5*dy, count/2, null, effect='double');
+        }
+        newParticles.push(
+          new Particle(x, y, dx, dy, Math.random() * 5 + 2, getColor())
+        );
+      }
+      break;
+    }
+
+    case "spinF": {
+      for (let i = 0; i < count/4; i++) {
+        const angle = i * 0.3; // spacing
+        const speed = 3 + i * 0.02;
+        const dx = Math.cos(angle) * speed;
+        const dy = Math.sin(angle) * speed;
+        if (Math.random() < 0.2) {
+          initParticles(x, y, count/10, null, effect='fountain')
+        }
+      }
+    }
+
+    case 'mega': {
+      for (let i = 0; i < 2*count; i++) {
+        const angle = Math.random() * Math.PI * 2;
+        const speed = Math.random() * 5 + 2;
+        const dx = Math.cos(angle) * speed; 
+        const dy = Math.sin(angle) * speed;
+        if (Math.random() < 0.1) {
+            initParticles(x + (4+4*Math.random())*dx,y + 5*dy, count/2, null, effect='double');
+        }
+        newParticles.push(
+          new Particle(x, y, dx, dy, Math.random() * 5 + 2, getColor())
+        );
+      }
+      break;
+    }
+
+
+    default: {
+      return initParticles(x, y, count, color, "circle");
+    }
   }
+
+  particles.push(...newParticles);
+
   if (!animating) {
     animate();
     animating = true;
-}
+  }
 }
 
 function animate() {
