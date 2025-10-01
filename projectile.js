@@ -84,6 +84,15 @@ export default class Firework {
     if (!this.playedSounds[1]) {
       play_Audio('fireworkblast-106275.mp3');
       this.playedSounds[1] = true;
+      if (document.body.style.animation != '') {
+        document.body.style.animation = 'flash 0.5s';
+        setTimeout(function() {document.body.style.animation = ''}, 500)
+      }
+      else {
+        document.body.style.animation = '';
+        document.body.style.animation = 'flash 0.5s';
+        setTimeout(function() {document.body.style.animation = ''}, 500)
+      }
     } 
     this.kill();
   }

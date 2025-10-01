@@ -14,6 +14,14 @@
     background:rgba(0,0,0,0.45); padding:8px 10px; border-radius:6px;
     font-size:13px; backdrop-filter: blur(4px); color:white; z-index:3;
   }
+  @keyframes flash{
+    0% {
+        background-color: rgb(255,255,255);
+    }
+    100% {
+        background-color: #111;
+    }
+}
 </style>
 <script src="spawner.js" type="module" defer></script>
 </head>

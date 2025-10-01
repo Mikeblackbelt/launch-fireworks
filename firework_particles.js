@@ -5,6 +5,7 @@ let particles = [];
 
 let animating = false;
 
+
 function resize() {
   const dpr = window.devicePixelRatio || 1;
   canvas.width = window.innerWidth * dpr;
@@ -182,4 +183,11 @@ function animate() {
   }
   
   requestAnimationFrame(animate);
+}
+
+
+for (let i = 0; i < 100; i++) {
+  let x = Math.random() * canvas.width;
+  let y = Math.random() * canvas.height;
+  particles.push(new Particle(x, y, 0, 0, 1, 'rgb(255,255,255)'));
 }
