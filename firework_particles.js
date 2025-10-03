@@ -16,7 +16,7 @@ window.addEventListener('resize', resize);
 resize();
 
 export class Particle {
-  constructor(x, y, dx, dy, size, color) {
+  constructor(x, y, dx, dy, size, color, doUpdate=true) {
     this.x = x;
     this.y = y;
     this.dx = dx;
@@ -24,35 +24,44 @@ export class Particle {
     this.size = size;
     this.color = color;
     this.alpha = 1;
+    this.doUpdate = doUpdate;
     this.rotation = Math.random() * Math.PI * 2;
   }
 
   update() {
-    this.x += this.dx;
-    this.dx *= 0.98; 
-    this.y += this.dy;
-    this.dy *= 0.99;
-    this.size *= 0.99;
-    this.alpha -= 0.01;
-    this.rotation += 0.03;
+    if (this.doUpdate) {
+      this.x += this.dx;
+      this.dx *= 0.98; 
+      this.y += this.dy;
+      this.dy *= 0.99;
+      this.size *= 0.99;
+      this.alpha -= 0.01;
+      this.rotation += 0.03;
+    }
     this.draw();
   }
 
   draw() {
     ctx.save();
-    ctx.globalAlpha = this.alpha;
-    ctx.translate(this.x, this.y);
-    ctx.rotate(this.rotation);
-    ctx.fillStyle = this.color;
-    ctx.shadowBlur = 15;
-    ctx.shadowColor = this.color;
-    ctx.fillRect(-this.size/2, -this.size/2, this.size, this.size);
+    if (this.doUpdate) {
+      ctx.globalAlpha = this.alpha;
+      ctx.translate(this.x, this.y);
+      ctx.rotate(this.rotation);
+      ctx.fillStyle = this.color;
+      ctx.shadowBlur = 15;
+      ctx.shadowColor = this.color;
+      ctx.fillRect(-this.size/2, -this.size/2, this.size, this.size);
+    }
+
+    
     ctx.restore();
   }
 }
 
 export function initParticles(x, y, count, color = null, effect = "circle") {
   let newParticles = [];
+  var doPush = true;
+
 
   const getColor = () =>
     color ?? `hsl(${Math.random() * 360}, 100%, 50%)`;
@@ -157,7 +166,19 @@ export function initParticles(x, y, count, color = null, effect = "circle") {
           new Particle(x, y, dx, dy, Math.random() * 5 + 2, getColor())
         );
       }
-      break;
+    }
+
+    case 'point': {
+      console.log('poimt');
+        newParticles.push(
+          new Particle(x, y, 0, 0, 2, 'rgb(255,255,255)',   false)
+        );
+        for (let i = newParticles.length - 1; i>=0; i--) {
+          const p = newParticles[i];
+          p.update();
+        }
+        let doPush = false;
+        console.log(doPush)
     }
 
 
@@ -165,9 +186,13 @@ export function initParticles(x, y, count, color = null, effect = "circle") {
       return initParticles(x, y, count, color, "circle");
     }
   }
+  console.log(doPush);
+  if (doPush) {
+    particles.push(...newParticles);
+    console.log('not poimt');
+  }
 
-  particles.push(...newParticles);
-
+  
   if (!animating) {
     animate();
     animating = true;
@@ -189,5 +214,5 @@ function animate() {
 for (let i = 0; i < 100; i++) {
   let x = Math.random() * canvas.width;
   let y = Math.random() * canvas.height;
-  particles.push(new Particle(x, y, 0, 0, 1, 'rgb(255,255,255)'));
+  initParticles(x,y,1,'rgb(255,255,255)', 'point');
 }
