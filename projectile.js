@@ -80,7 +80,7 @@ export default class Firework {
   }
 
   explode() {
-    initParticles(this.x, this.y, 100, this.fpc, choice(["circle", "spiral",'down', "star", "fountain",'double', 'spinF','mega'],[11,6,126,3,3,4,0.2,0.4]));
+    initParticles(this.x, this.y, 100, this.fpc, choice(["circle", "spiral",'down', "star", "fountain",'double', 'spinF','mega'],[11,6,6,3,3,4,0.2,0.4]));
     if (!this.playedSounds[1]) {
       play_Audio('fireworkblast-106275.mp3');
       this.playedSounds[1] = true;
